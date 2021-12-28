@@ -1,3 +1,4 @@
+/* eslint-disable */
 import path from 'path';
 import fs from 'fs';
 import webpack from 'webpack';
@@ -18,7 +19,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const port = process.env.PORT || 1212;
 const manifest = path.resolve(webpackPaths.dllPath, 'renderer.json');
-const requiredByDLLConfig = module.parent.filename.includes(
+const requiredByDLLConfig = module.filename.includes(
   'webpack.config.renderer.dev.dll'
 );
 
@@ -39,9 +40,7 @@ if (
 
 export default merge(baseConfig, {
   devtool: 'inline-source-map',
-
   mode: 'development',
-
   target: ['web', 'electron-renderer'],
 
   entry: [
@@ -128,13 +127,11 @@ export default merge(baseConfig, {
     ],
   },
   plugins: [
-    requiredByDLLConfig
-      ? null
-      : new webpack.DllReferencePlugin({
-          context: webpackPaths.dllPath,
-          manifest: require(manifest),
-          sourceType: 'var',
-        }),
+    new webpack.DllReferencePlugin({
+      context: webpackPaths.dllPath,
+      manifest: require(manifest),
+      sourceType: 'var',
+    }),
 
     new webpack.NoEmitOnErrorsPlugin(),
 
@@ -190,7 +187,7 @@ export default merge(baseConfig, {
     },
     historyApiFallback: {
       verbose: true,
-      disableDotRule: false,
+      disableDotRule: true,
     },
     onBeforeSetupMiddleware() {
       console.log('Starting Main Process...');
@@ -199,7 +196,7 @@ export default merge(baseConfig, {
         env: process.env,
         stdio: 'inherit',
       })
-        .on('close', (code) => process.exit(code))
+        .on('close', (code) => process.exit(code || 0))
         .on('error', (spawnError) => console.error(spawnError));
     },
   },
