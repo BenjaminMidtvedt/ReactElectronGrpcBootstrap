@@ -18,9 +18,13 @@ node_modules
 # OSX
 .DS_Store
 
+
+src/main/compiled
 release/app/dist
 release/build
 .erb/dll
+
+**/*/webpack.*
 
 .idea
 npm-debug.log.*

@@ -1,21 +1,18 @@
 import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
-// import client from '../main/client'
 
+import { useEffect, useState } from 'react';
 import icon from '../../assets/icon.svg';
 import './App.css';
 import 'tailwindcss/tailwind.css';
-import { useCallback, useEffect, useState } from 'react';
 
 const Hello = () => {
   const [greeting, setGreeting] = useState('');
   const [language, setLanguage] = useState('en');
 
   useEffect(() => {
-    window.grpc.GetGreeting({ language }, (err, val) => {
+    window.grpc.GetGreeting({ language }, (_, val) => {
       if (val) {
         setGreeting(val.greeting);
-      } else {
-        console.error(err);
       }
     });
   }, [language]);
