@@ -10,7 +10,7 @@ const Hello = () => {
   const [language, setLanguage] = useState('en');
 
   useEffect(() => {
-    window.grpc.GetGreeting({ language }, (err, val) => {
+    window.grpc.GetGreeting({ language }, (_, val) => {
       if (val) {
         setGreeting(val.greeting);
       }
